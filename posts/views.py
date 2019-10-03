@@ -49,3 +49,4 @@ def update(request, post_id):
         'post_form': post_form
     }
     return render(request, 'posts/update.html', context)
+
