@@ -11,6 +11,24 @@
         </form>
         {% endif %}
     </div>
+    <div class="post__user">
+        <p>유저이름: {{post.user.username}}</p>
+        {% if user.is_authenticated and user != post.user %}
+        <form action="{% url 'accounts:follow' post.user.id %}" method="POST">
+            {% csrf_token %}
+            {% if user not in post.user.followers.all %}
+            <input type="submit" value="팔로우하기">
+            {% else %}
+            <input type="submit" value="팔로우 취소">
+            {% endif %}
+        </form>
+        {% endif %}
+    </div>
+    <div class="post__followers">
+        {% for follower in post.user.followers.all %}
+        팔로워: <a href="#">{{follower}}</a>
+        {% endfor %}
+    </div>
     <div class="post_likes">
             {{post.like_users.count}}
         {% if user.is_authenticated %}

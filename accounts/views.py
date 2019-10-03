@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash, get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
@@ -77,3 +77,12 @@ def update_password(request):
     }
     return render(request, "accounts/update_password.html", context)
 
+@login_required
+def follow(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
+    if request.method == "POST":
+        if request.user not in user.followers.all():
+            user.followers.add(request.user)
+        else:
+            user.followers.remove(request.user)     
+    return redirect("posts:index")
