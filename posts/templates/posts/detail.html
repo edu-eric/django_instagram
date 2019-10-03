@@ -11,6 +11,22 @@
         </form>
         {% endif %}
     </div>
+    <div class="post_likes">
+            {{post.like_users.count}}
+        {% if user.is_authenticated %}
+        <form action="{% url 'posts:likeit' post.id user.id %}" method="POST">
+            {% csrf_token %}
+            {% if user not in post.like_users.all %}
+            <input type="submit" value="좋아요!">
+            {% else %}
+            <input type="submit" value="좋아요 취소!">
+            {% endif %}
+        </form>
+        {% endif %}
+        {% for like_user in post.like_users.all %}
+        <a href="#">{{like_user}}</a>
+        {% endfor %}
+    </div>
     <div class="post__title">
         <h1>{{post.title}}</h1>
     </div>

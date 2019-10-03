@@ -75,3 +75,13 @@ def delete_comment(request, post_id, comment_id):
     if request.method == "POST":
         comment.delete()
     return redirect("posts:detail", post_id)
+
+@login_required
+def likeit(request, post_id, user_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.method == "POST":
+        if request.user not in post.like_users.all():
+            post.like_users.add(request.user)
+        else:
+            post.like_users.remove(request.user)
+    return redirect("posts:detail", post_id)
