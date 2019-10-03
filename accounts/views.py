@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserChangeForm
 
@@ -61,3 +61,18 @@ def update_account(request):
             'user_form': user_form
         }
     return render(request, "accounts/update_account.html", context)
+
+@login_required
+def update_password(request):
+    if request.method == "POST":
+        user_form = PasswordChangeForm(user=request.user, data=request.POST)
+        if user_form.is_valid():
+            user_form.save()
+            update_session_auth_hash(request, user_form.user) # 패스워드 변경 후 세션유지
+            return redirect("posts:index")
+    else:
+        user_form = PasswordChangeForm(user=request.user)
+    context = {
+        "user_form": user_form
+    }
+    return render(request, "accounts/update_password.html", context)
