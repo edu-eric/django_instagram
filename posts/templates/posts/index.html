@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<a href="{% url 'posts:create' %}">게시글 작성하기</a>
 {% for post in posts %}
 <div class="posts__list">
     <a href="#">{{post.title}}</a>
