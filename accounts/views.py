@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.decorators import login_required
+from .forms import CustomUserChangeForm
 
 # Create your views here.
 def signup(request):
@@ -50,12 +51,12 @@ def delete_account(request):
 @login_required
 def update_account(request):
     if request.method == "POST":
-        user_form = UserChangeForm(request.POST, instance=request.user)
+        user_form = CustomUserChangeForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
             return redirect("posts:index")
     else:
-        user_form = UserChangeForm(instance=request.user)
+        user_form = CustomUserChangeForm(instance=request.user)
     context = {
             'user_form': user_form
         }
