@@ -30,20 +30,16 @@
         {% endfor %}
     </div>
     <div class="post_likes">
-            {{post.like_users.count}}
+        <p class="like-count">{{post.user.followers.count}}</p>
         {% if user.is_authenticated %}
-        <form action="{% url 'posts:likeit' post.id user.id %}" method="POST">
-            {% csrf_token %}
-            {% if user not in post.like_users.all %}
-            <input type="submit" value="좋아요!">
+        <button class="like-btn">
+            {% if user in post.user.followers.all %}
+            좋아요 취소
             {% else %}
-            <input type="submit" value="좋아요 취소!">
+            좋아요
             {% endif %}
-        </form>
+        </button>
         {% endif %}
-        {% for like_user in post.like_users.all %}
-        <a href="#">{{like_user}}</a>
-        {% endfor %}
     </div>
     <div class="post__title">
         <h1>{{post.title}}</h1>
@@ -79,4 +75,27 @@
         </ul>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    let likeBtn = document.querySelector(".like-btn")
+    let likeCount = document.querySelector(".like-count")
+
+    axios.defaults.xsrfCookieName = 'csrftoken'
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+    likeBtn.addEventListener("click", function() {
+        axios.post("{% url 'posts:likeit' post.id user.id %}")
+            .then( res => {
+                let message = res.data.message
+                let like_count = res.data.like_users
+                likeBtn.innerText = message
+                likeCount.innerText = like_count
+            })
+            .catch( err => {
+                console.log(err, "문제가 있나봐요...")
+            })
+    })
+</script>
 {% endblock %}

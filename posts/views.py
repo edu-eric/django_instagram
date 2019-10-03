@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Post, Comment
 from .forms import PostForm
@@ -82,6 +83,12 @@ def likeit(request, post_id, user_id):
     if request.method == "POST":
         if request.user not in post.like_users.all():
             post.like_users.add(request.user)
+            message = "좋아요 취소"
         else:
             post.like_users.remove(request.user)
-    return redirect("posts:detail", post_id)
+            message = "좋아요"
+    response_data = {
+        'like_users': post.like_count,
+        'message': message,
+    }
+    return JsonResponse(response_data)
