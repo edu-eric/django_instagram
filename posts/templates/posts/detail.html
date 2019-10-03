@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="post--manipulate">
+        <a href="#">수정하기</a>
+        <a href="#">삭제하기</a>
+    </div>
+    <div class="post__title">
+        <h1>{{post.title}}</h1>
+    </div>
+    <div class="post__content">
+        <p>{{post.content}}</p>
+    </div>
+</div>
+{% endblock %}
