@@ -24,5 +24,17 @@
         <img src="/media/baby.jpeg" width="300" height="300" alt="post_image">
         {% endif %}
     </div>
+    <div class="post__comments">
+        <form action="{% url 'posts:create_comment' post.id %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="content">
+            <input type="submit" value="댓글 작성하기">
+        </form>
+        <ul>
+            {% for comment in post.comment_set.all %}
+            <li>{{comment.user.username}}: {{comment.content}}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}

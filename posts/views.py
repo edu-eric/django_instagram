@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post
+from .models import Post, Comment
 from .forms import PostForm
 
 # Create your views here.
@@ -60,3 +60,11 @@ def update(request, post_id):
             }
     return render(request, 'posts/update.html', context)
 
+@login_required
+def create_comment(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.method == "POST":
+        content = request.POST.get("content")
+        comment = Comment(content=content, post=post, user=request.user)
+        comment.save()
+    return redirect("posts:detail", post_id)
