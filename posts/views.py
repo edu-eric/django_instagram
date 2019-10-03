@@ -29,3 +29,9 @@ def detail(request, post_id):
         'post': post
     }
     return render(request, 'posts/detail.html', context)
+
+def delete(request, post_id):
+    if request.method == "POST":
+        post = get_object_or_404(Post, pk=post_id)
+        post.delete()
+    return redirect("posts:index")
