@@ -76,3 +76,4 @@ def update_password(request):
         "user_form": user_form
     }
     return render(request, "accounts/update_password.html", context)
+
