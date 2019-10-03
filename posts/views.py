@@ -35,3 +35,17 @@ def delete(request, post_id):
         post = get_object_or_404(Post, pk=post_id)
         post.delete()
     return redirect("posts:index")
+
+def update(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.method == "POST":
+        post_form = PostForm(request.POST, instance=post)
+        if post_form.is_valid():
+            post_form.save()
+            return redirect("/")
+    else:
+        post_form = PostForm(instance=post)
+    context = {
+        'post_form': post_form
+    }
+    return render(request, 'posts/update.html', context)

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-5">
     <div class="post--manipulate">
-        <a href="#">수정하기</a>
+        <a href="{% url 'posts:update' post.id %}">수정하기</a>
         <form action="{% url 'posts:delete' post.id %}" method="POST">
             {% csrf_token %}
             <input type="submit" value="삭제하기">
