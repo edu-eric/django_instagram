@@ -15,6 +15,7 @@
         <a class="mr-2" href="{% url 'accounts:login' %}">로그인</a>
         {% else %}
         <a class="mr-2" href="{% url 'accounts:logout' %}">로그아웃</a>
+        <a class="mr-2" href="{% url 'accounts:delete_account' %}">탈퇴하기</a>
         {% endif %}
     </nav>
     {% block content %}
