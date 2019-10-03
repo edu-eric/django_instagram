@@ -3,11 +3,13 @@
 {% block content %}
 <div class="container mt-5">
     <div class="post--manipulate">
+        {% if user == post.user %}
         <a href="{% url 'posts:update' post.id %}">수정하기</a>
         <form action="{% url 'posts:delete' post.id %}" method="POST">
             {% csrf_token %}
             <input type="submit" value="삭제하기">
         </form>
+        {% endif %}
     </div>
     <div class="post__title">
         <h1>{{post.title}}</h1>
