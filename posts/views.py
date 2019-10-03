@@ -13,16 +13,19 @@ def index(request):
 
 @login_required
 def create(request):
-    if request.method == "POST":
+    if request.method=="POST":
+        print(request.FILES)
         post_form = PostForm(request.POST, request.FILES)
         if post_form.is_valid():
-            post_form.save()
+            post = post_form.save(commit=False)    # 생성하되 DB에 반영은 아직!
+            post.user = request.user               # 유저 정보를 따로 입력 후
+            post.save()                            # 실제 DB에 반영시킵니다.
             return redirect("/")
     else:
         post_form = PostForm()
-    context = {
-        "post_form": post_form
-    }
+        context = {
+            'post_form': post_form,
+        }
     return render(request, 'posts/create.html', context)
 
 def detail(request, post_id):
