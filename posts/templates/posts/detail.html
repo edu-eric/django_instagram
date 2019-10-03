@@ -16,7 +16,9 @@
         <p>{{post.content}}</p>
     </div>
     <div class="post__image">
+        {% if post.image %}
         <img src="{{post.image.url}}" width="300" height="300" alt="post_image">
+        {% endif %}
     </div>
 </div>
 {% endblock %}
