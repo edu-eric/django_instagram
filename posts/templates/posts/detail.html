@@ -32,7 +32,15 @@
         </form>
         <ul>
             {% for comment in post.comment_set.all %}
-            <li>{{comment.user.username}}: {{comment.content}}</li>
+            <li>
+                {{comment.user.username}}: {{comment.content}}
+                {% if user == comment.user %}
+                <form action="{% url 'posts:delete_comment' post.id comment.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="댓글 삭제하기">
+                </form>
+                {% endif %}
+            </li>
             {% endfor %}
         </ul>
     </div>

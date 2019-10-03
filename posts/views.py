@@ -68,3 +68,10 @@ def create_comment(request, post_id):
         comment = Comment(content=content, post=post, user=request.user)
         comment.save()
     return redirect("posts:detail", post_id)
+
+@login_required
+def delete_comment(request, post_id, comment_id):
+    comment = Comment.objects.get(pk=comment_id)
+    if request.method == "POST":
+        comment.delete()
+    return redirect("posts:detail", post_id)
