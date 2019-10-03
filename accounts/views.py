@@ -5,10 +5,13 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 # Create your views here.
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect("posts:index")
     if request.method == "POST":
         user_form = UserCreationForm(request.POST)
         if user_form.is_valid():
-            user_form.save()
+            user = user_form.save()    # 새로운 유저 정보를 생성해주고
+            auth_login(request, user)  # 로그인 함수를 통해 세션을 생성해줍니다.
             return redirect('/')
     else:
         user_form = UserCreationForm()
