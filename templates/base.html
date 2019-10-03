@@ -10,6 +10,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/">Instagram</a>
+        <a href="{% url 'accounts:signup' %}">회원가입</a>
     </nav>
     {% block content %}
     {% endblock %}
