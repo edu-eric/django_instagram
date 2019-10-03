@@ -3,20 +3,20 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 # Create your views here.
 def signup(request):
     if request.user.is_authenticated:
         return redirect("posts:index")
     if request.method == "POST":
-        user_form = UserCreationForm(request.POST)
+        user_form = CustomUserCreationForm(request.POST)
         if user_form.is_valid():
             user = user_form.save()    # 새로운 유저 정보를 생성해주고
             auth_login(request, user)  # 로그인 함수를 통해 세션을 생성해줍니다.
             return redirect('/')
     else:
-        user_form = UserCreationForm()
+        user_form = CustomUserCreationForm()
     context = {
         'user_form': user_form,
     }
