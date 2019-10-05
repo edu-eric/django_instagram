@@ -6,7 +6,13 @@ from .forms import PostForm
 
 # Create your views here.
 def index(request):
+    # 디폴트 게시글 리스트
     posts = Post.objects.all()
+    # 검색 키워드값이 있을 경우
+    query = request.GET.get("query")
+    if query:
+        posts = Post.objects.filter(title__contains=query)
+
     context = {
         'posts': posts,
     }
@@ -92,3 +98,6 @@ def likeit(request, post_id, user_id):
         'message': message,
     }
     return JsonResponse(response_data)
+
+def search(request, keyword):
+    pass
