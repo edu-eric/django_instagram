@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import Post, Comment
 from .forms import PostForm
 
@@ -11,8 +12,13 @@ def index(request):
     # 검색 키워드값이 있을 경우
     query = request.GET.get("query")
     if query:
-        posts = Post.objects.filter(title__contains=query)
-
+        posts = Post.objects.filter(
+            Q(title__icontains=query)|
+            Q(content__icontains=query)|
+            Q(user__first_name__icontains=query)|
+            Q(user__last_name__icontains=query)|
+            Q(user__username__icontains=query)
+        )
     context = {
         'posts': posts,
     }
